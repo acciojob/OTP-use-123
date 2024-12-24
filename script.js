@@ -1,28 +1,75 @@
 //your JS code here. If required.
+// Get all input fields
 const inputs = document.querySelectorAll('.code');
 
-    inputs.forEach((input, index) => {
-      input.addEventListener('input', () => {
-        if (input.value.length === 1 && index < inputs.length - 1) {
-          inputs[index + 1].focus();
-        }
-      });
+// Add event listeners to each input field
+inputs.forEach((input, index) => {
+    // Handle input events
+    input.addEventListener('input', function(e) {
+        // Only allow numbers
+        this.value = this.value.replace(/[^0-9]/g, '');
 
-      input.addEventListener('keydown', (event) => {
-        if (event.key === 'Backspace' && input.value.length === 0 && index > 0) {
-          inputs[index - 1].focus();
-          inputs[index - 1].value = ''; // Clear the previous input
+        // If a number is entered
+        if (this.value) {
+            // Move to next input if available
+            if (index < inputs.length - 1) {
+                inputs[index + 1].focus();
+            }
         }
-      });
     });
 
-    function submitOtp() {
-      let otp = '';
-      inputs.forEach(input => otp += input.value);
+    // Handle backspace
+    input.addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace') {
+            // Clear current input
+            if (this.value) {
+                this.value = '';
+                return;
+            }
+            
+            // Move to previous input if available and clear it
+            if (index > 0) {
+                inputs[index - 1].focus();
+                inputs[index - 1].value = '';
+            }
+        }
 
-      if (otp.length === 6) {
-        alert(`OTP Submitted: ${otp}`);
-      } else {
-        alert('Please enter all 6 digits of the OTP');
-      }
-    }
+        // Handle left arrow key
+        if (e.key === 'ArrowLeft' && index > 0) {
+            inputs[index - 1].focus();
+        }
+
+        // Handle right arrow key
+        if (e.key === 'ArrowRight' && index < inputs.length - 1) {
+            inputs[index + 1].focus();
+        }
+    });
+
+    // Handle paste event
+    input.addEventListener('paste', function(e) {
+        e.preventDefault();
+        
+        // Get pasted data
+        const pastedData = (e.clipboardData || window.clipboardData)
+            .getData('text')
+            .trim()
+            .slice(0, inputs.length)
+            .split('');
+
+        // Fill inputs with pasted data
+        pastedData.forEach((value, i) => {
+            if (i >= inputs.length) return;
+            if (/[0-9]/.test(value)) {
+                inputs[i].value = value;
+                if (i < inputs.length - 1) {
+                    inputs[i + 1].focus();
+                }
+            }
+        });
+    });
+});
+
+// Automatically focus first input on page load
+window.addEventListener('load', () => {
+    inputs[0].focus();
+});
