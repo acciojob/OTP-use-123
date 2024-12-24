@@ -1,75 +1,51 @@
 //your JS code here. If required.
-// Get all input fields
-const inputs = document.querySelectorAll('.code');
+// Get DOM elements
+const circles = document.querySelectorAll('.circle');
+const lines = document.querySelectorAll('.line');
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
 
-// Add event listeners to each input field
-inputs.forEach((input, index) => {
-    // Handle input events
-    input.addEventListener('input', function(e) {
-        // Only allow numbers
-        this.value = this.value.replace(/[^0-9]/g, '');
+let currentActive = 1;
 
-        // If a number is entered
-        if (this.value) {
-            // Move to next input if available
-            if (index < inputs.length - 1) {
-                inputs[index + 1].focus();
-            }
-        }
-    });
-
-    // Handle backspace
-    input.addEventListener('keydown', function(e) {
-        if (e.key === 'Backspace') {
-            // Clear current input
-            if (this.value) {
-                this.value = '';
-                return;
-            }
-            
-            // Move to previous input if available and clear it
-            if (index > 0) {
-                inputs[index - 1].focus();
-                inputs[index - 1].value = '';
-            }
-        }
-
-        // Handle left arrow key
-        if (e.key === 'ArrowLeft' && index > 0) {
-            inputs[index - 1].focus();
-        }
-
-        // Handle right arrow key
-        if (e.key === 'ArrowRight' && index < inputs.length - 1) {
-            inputs[index + 1].focus();
-        }
-    });
-
-    // Handle paste event
-    input.addEventListener('paste', function(e) {
-        e.preventDefault();
-        
-        // Get pasted data
-        const pastedData = (e.clipboardData || window.clipboardData)
-            .getData('text')
-            .trim()
-            .slice(0, inputs.length)
-            .split('');
-
-        // Fill inputs with pasted data
-        pastedData.forEach((value, i) => {
-            if (i >= inputs.length) return;
-            if (/[0-9]/.test(value)) {
-                inputs[i].value = value;
-                if (i < inputs.length - 1) {
-                    inputs[i + 1].focus();
-                }
-            }
-        });
-    });
+// Add click event for next button
+nextBtn.addEventListener('click', () => {
+    if (currentActive < circles.length) {
+        currentActive++;
+        updateUI();
+    }
 });
 
-// Automatically focus first input on page load
-window.addEventListener('load', () => {
-    inputs[0].focus();
+// Add click event for prev button
+prevBtn.addEventListener('click', () => {
+    if (currentActive > 1) {
+        currentActive--;
+        updateUI();
+    }
 });
+
+function updateUI() {
+    // Update circles
+    circles.forEach((circle, idx) => {
+        if (idx < currentActive) {
+            circle.classList.add('active');
+        } else {
+            circle.classList.remove('active');
+        }
+    });
+
+    // Update connecting lines
+    lines.forEach((line, idx) => {
+        if (idx < currentActive - 1) {
+            line.classList.add('active');
+        } else {
+            line.classList.remove('active');
+        }
+    });
+
+    // Update button states
+    prevBtn.disabled = currentActive === 1;
+    nextBtn.disabled = currentActive === circles.length;
+}
+
+// Initial setup
+updateUI();

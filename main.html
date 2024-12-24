@@ -22,26 +22,32 @@
 
 </html>-->
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1 id="verification_heading">Verify Your Account</h1>
-    <p id="verification_subtext">We emailed you the six digit code to acciojob@email.com. Enter the code below to confirm your email address.</p>
-    
-    <div class="code-container">
-        <input type="text" maxlength="1" class="code" />
-        <input type="text" maxlength="1" class="code" />
-        <input type="text" maxlength="1" class="code" />
-        <input type="text" maxlength="1" class="code" />
-        <input type="text" maxlength="1" class="code" />
-        <input type="text" maxlength="1" class="code" />
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="circle-container">
+                <!-- Circles connected by lines -->
+                <div class="circle active" id="circle-1">1</div>
+                <div class="line"></div>
+                <div class="circle" id="circle-2">2</div>
+                <div class="line"></div>
+                <div class="circle" id="circle-3">3</div>
+                <div class="line"></div>
+                <div class="circle" id="circle-4">4</div>
+                <div class="line"></div>
+                <div class="circle" id="circle-5">5</div>
+            </div>
+        </div>
+        <div class="button-container">
+            <button id="prev" disabled>Prev</button>
+            <button id="next">Next</button>
+        </div>
     </div>
-
-    <p>This is design only. We didn't actually send you an email as we don't have your email, right?</p>
-
-    <!-- the entire body must be written by student -->
     <script type="text/javascript" src="./script.js"></script>
 </body>
 </html>
